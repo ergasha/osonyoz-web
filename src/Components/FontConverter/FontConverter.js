@@ -348,7 +348,7 @@ function FontConverter() {
                         </p>
                     </Paper>
                     <div className="download_button">
-                        <Button onClick={generateJpeg} variant="contained" style={{color: 'white', backgroundColor: '#ec4c4c'}}>Yuklab olish </Button>
+                        <Button onClick={generatePdf} variant="contained" style={{color: 'white', backgroundColor: '#ec4c4c'}}>Yuklab olish </Button>
                         
                     </div>
                 </div>
