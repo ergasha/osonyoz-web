@@ -3,10 +3,9 @@ import { SketchPicker, CirclePicker } from 'react-color'
 import domtoimage from 'dom-to-image';
 import Fade from '@material-ui/core/Fade';
 import { Paper, Button, MenuItem, Select, FormControl, InputLabel, Slider, FormControlLabel, Switch, Tooltip } from '@material-ui/core'
-import PdfGenerator from '../PDFGenerator/PdfGenerator';
 import './FontConverter.css'
 import './fonts.css'
-
+import generateHighResImage from './imageGenerator';
 import Usage from '../Usage/Usage';
 
 
@@ -57,11 +56,11 @@ function FontConverter() {
     };
 
     const sendImage = () => {
-        const scale = 2; // Adjust scale for higher resolution
-        const node = document.getElementById('page'); // The element to capture
+        const scale = 2; 
+        const node = document.getElementById('page'); 
     
         const options = {
-            quality: 1, // Ensure maximum quality for the image
+            quality: 1, 
             width: node.offsetWidth * scale,
             height: node.offsetHeight * scale,
             style: {
@@ -71,21 +70,17 @@ function FontConverter() {
                 height: `${node.offsetHeight}px`
             }
         };
-    
-        // Use dom-to-image with custom options to generate a high-quality image
+
         domtoimage.toBlob(node, options)
             .then(function (blob) {
-                // Prepare FormData for Telegram API
                 const formData = new FormData();
-                const userId = window.Telegram.WebApp.initDataUnsafe?.user?.id; // Get Telegram user ID from WebApp
+                const userId = window.Telegram.WebApp.initDataUnsafe?.user?.id; 
                 if (!userId) {
-                    console.error('User ID not found!');
+                    generateHighResImage()
                     return;
                 }
                 formData.append('chat_id', userId);
-                formData.append('document', blob, 'image.jpeg'); // Add the image blob as a file
-    
-                // Send the image to Telegram using the bot's API
+                formData.append('document', blob, 'image.jpeg'); 
                 fetch('https://api.telegram.org/bot5228072940:AAFk5TyN-1-e7T0w60Pe_hmFk2Cn8Iqn0zI/sendDocument', {
                     method: 'POST',
                     body: formData,
@@ -125,7 +120,6 @@ function FontConverter() {
                     </div>
                 </div>
                 <div className="font_selector">
-                {/* <h2>Select Styles</h2> */}
                 <div className="gridOne">
                     <div className="fontFamily" style={{marginBottom: "1.5rem"}}>
                             <FormControl style={{minWidth: 150}}>

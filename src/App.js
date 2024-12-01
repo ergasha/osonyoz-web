@@ -28,11 +28,6 @@ function App() {
 
   return (
     <div className="App">
-      {chatId ? (
-        <h1>{chatId}</h1>
-      ):(
-        <h1>No</h1>
-      )}
         <Header />
         <Info />
         <FontConverter />
