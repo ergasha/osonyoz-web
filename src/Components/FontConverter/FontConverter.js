@@ -3,14 +3,15 @@ import { SketchPicker, CirclePicker } from 'react-color'
 import domtoimage from 'dom-to-image';
 import Fade from '@material-ui/core/Fade';
 import { Paper, Button, MenuItem, Select, FormControl, InputLabel, Slider, FormControlLabel, Switch, Tooltip } from '@material-ui/core'
+import PdfGenerator from '../PDFGenerator/PdfGenerator';
 import './FontConverter.css'
 import './fonts.css'
 
 import Usage from '../Usage/Usage';
 
 
-function FontConverter({chatId}) {
-    const [chat_id,setChatId] = useState(chatId)
+function FontConverter() {
+
     const [text, setText] = useState("Qo'lyozmaga aylantirmoqchi bo'lgan matningizni shu yerga yozing")
     const [fontFamily, setFontFamily] = useState("'Beth Ellen', cursive")
     const [fontSize, setFontSize] = useState(17)
@@ -56,9 +57,37 @@ function FontConverter({chatId}) {
     };
 
     const generateJpeg = () => {
-        console.log(chat_id);
-        
-    }
+        domtoimage.toJpeg(document.getElementById('page'), { quality: 1 })
+        .then(function (dataUrl) {
+            const byteArray = atob(dataUrl.split(',')[1]);
+            const arrayBuffer = new ArrayBuffer(byteArray.length);
+            const uintArray = new Uint8Array(arrayBuffer);
+            
+            for (let i = 0; i < byteArray.length; i++) {
+                uintArray[i] = byteArray.charCodeAt(i);
+            }
+            
+            const blob = new Blob([uintArray], { type: 'image/jpeg' });
+            const formData = new FormData();
+            formData.append('chat_id', window.Telegram.WebApp.initDataUnsafe.chat.id); 
+            formData.append('photo', blob, 'download.jpeg');
+            fetch('https://api.telegram.org/bot5228072940:AAFk5TyN-1-e7T0w60Pe_hmFk2Cn8Iqn0zI/sendPhoto', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
+                    console.log('Image sent successfully');
+                } else {
+                    console.error('Failed to send image:', data.description);
+                }
+            })
+            .catch(error => {
+                console.error('Error while sending photo:', error);
+            });
+        });
+    };
     
 
     return (
