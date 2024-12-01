@@ -57,7 +57,23 @@ function FontConverter() {
     };
 
     const sendImage = () => {
-        domtoimage.toBlob(document.getElementById('page'), { quality: 1, scale: 2 })
+        const scale = 2; // Adjust scale for higher resolution
+        const node = document.getElementById('page'); // The element to capture
+    
+        const options = {
+            quality: 1, // Ensure maximum quality for the image
+            width: node.offsetWidth * scale,
+            height: node.offsetHeight * scale,
+            style: {
+                transform: `scale(${scale})`,
+                transformOrigin: 'top left',
+                width: `${node.offsetWidth}px`,
+                height: `${node.offsetHeight}px`
+            }
+        };
+    
+        // Use dom-to-image with custom options to generate a high-quality image
+        domtoimage.toBlob(node, options)
             .then(function (blob) {
                 // Prepare FormData for Telegram API
                 const formData = new FormData();
@@ -90,6 +106,7 @@ function FontConverter() {
                 console.error('Error while generating image blob:', error);
             });
     };
+    
     
     
 
