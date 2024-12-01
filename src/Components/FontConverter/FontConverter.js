@@ -57,10 +57,12 @@ function FontConverter() {
     };
 
     const generateJpeg = () => {
-        // Capture the 'page' element and generate a higher resolution JPEG image
-        domtoimage.toJpeg(document.getElementById('page'), { quality: 1, bgcolor: 'white', style: { transform: 'scale(2)' } })
+        domtoimage.toJpeg(document.getElementById('page'), {
+            quality: 1,  // Ensure highest quality
+            width: window.innerWidth * 2,  // Optional: upscale resolution for better quality
+            height: window.innerHeight * 2  // Optional: upscale resolution for better quality
+        })
         .then(function (dataUrl) {
-            // Create a Blob from the Data URL
             const byteArray = atob(dataUrl.split(',')[1]);
             const arrayBuffer = new ArrayBuffer(byteArray.length);
             const uintArray = new Uint8Array(arrayBuffer);
@@ -70,14 +72,11 @@ function FontConverter() {
             }
             
             const blob = new Blob([uintArray], { type: 'image/jpeg' });
-            
-            // Send the image to Telegram bot
             const formData = new FormData();
-            formData.append('chat_id', window.Telegram.WebApp.initDataUnsafe.user.id);  // Use chat ID from Telegram WebApp
-            formData.append('photo', blob, 'download.jpeg');
+            formData.append('chat_id', window.Telegram.WebApp.initDataUnsafe.user.id); 
+            formData.append('document', blob, 'download.jpeg');
             
-            // Send the image via the Telegram Bot API
-            fetch('https://api.telegram.org/bot5228072940:AAFk5TyN-1-e7T0w60Pe_hmFk2Cn8Iqn0zI/sendPhoto', {
+            fetch('https://api.telegram.org/bot5228072940:AAFk5TyN-1-e7T0w60Pe_hmFk2Cn8Iqn0zI/sendDocument', {
                 method: 'POST',
                 body: formData,
             })
