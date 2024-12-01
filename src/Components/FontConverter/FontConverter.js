@@ -59,8 +59,6 @@ function FontConverter() {
     const generateJpeg = () => {
         domtoimage.toJpeg(document.getElementById('page'), {
             quality: 1,  // Ensure highest quality
-            width: window.innerWidth * 2,  // Optional: upscale resolution for better quality
-            height: window.innerHeight * 2  // Optional: upscale resolution for better quality
         })
         .then(function (dataUrl) {
             const byteArray = atob(dataUrl.split(',')[1]);
