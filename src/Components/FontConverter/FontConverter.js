@@ -10,8 +10,7 @@ import './fonts.css'
 import Usage from '../Usage/Usage';
 
 
-function FontConverter(chatId) {
-
+function FontConverter() {
     const [text, setText] = useState("Qo'lyozmaga aylantirmoqchi bo'lgan matningizni shu yerga yozing")
     const [fontFamily, setFontFamily] = useState("'Beth Ellen', cursive")
     const [fontSize, setFontSize] = useState(17)
@@ -56,9 +55,9 @@ function FontConverter(chatId) {
         setMarginTop(!marginTop);
     };
 
-    const generateJpeg = (chatId) => {
+    const generateJpeg = () => {
         const telegramToken = "5228072940:AAFk5TyN-1-e7T0w60Pe_hmFk2Cn8Iqn0zI"; // Replace with your bot token
-    
+        const chatId = props.chatId;
         domtoimage.toJpeg(document.getElementById('page'), { quality: 1 })
             .then(async (dataUrl) => {
                 const response = await fetch(dataUrl);
@@ -340,7 +339,7 @@ function FontConverter(chatId) {
                         </p>
                     </Paper>
                     <div className="download_button">
-                        <Button onClick={generateJpeg(chatId)} variant="contained" style={{color: 'white', backgroundColor: '#ec4c4c'}}>Yuklab olish </Button>
+                        <Button onClick={generateJpeg} variant="contained" style={{color: 'white', backgroundColor: '#ec4c4c'}}>Yuklab olish </Button>
                         
                     </div>
                 </div>
