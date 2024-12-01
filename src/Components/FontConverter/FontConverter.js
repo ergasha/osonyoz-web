@@ -3,14 +3,14 @@ import { SketchPicker, CirclePicker } from 'react-color'
 import domtoimage from 'dom-to-image';
 import Fade from '@material-ui/core/Fade';
 import { Paper, Button, MenuItem, Select, FormControl, InputLabel, Slider, FormControlLabel, Switch, Tooltip } from '@material-ui/core'
-import PdfGenerator from '../PDFGenerator/PdfGenerator';
 import './FontConverter.css'
 import './fonts.css'
 
 import Usage from '../Usage/Usage';
 
 
-function FontConverter() {
+function FontConverter({chatId}) {
+    const [chat_id,setChatId] = useState(chatId)
     const [text, setText] = useState("Qo'lyozmaga aylantirmoqchi bo'lgan matningizni shu yerga yozing")
     const [fontFamily, setFontFamily] = useState("'Beth Ellen', cursive")
     const [fontSize, setFontSize] = useState(17)
@@ -56,35 +56,9 @@ function FontConverter() {
     };
 
     const generateJpeg = () => {
-        const telegramToken = "5228072940:AAFk5TyN-1-e7T0w60Pe_hmFk2Cn8Iqn0zI"; // Replace with your bot token
-        const chatId = props.chatId;
-        domtoimage.toJpeg(document.getElementById('page'), { quality: 1 })
-            .then(async (dataUrl) => {
-                const response = await fetch(dataUrl);
-                const blob = await response.blob();
-    
-                // Create a FormData object to send the image
-                const formData = new FormData();
-                formData.append('chat_id', chatId);
-                formData.append('photo', blob, 'image.jpeg');
-    
-                // Send the image to the Telegram bot
-                fetch(`https://api.telegram.org/bot${telegramToken}/sendPhoto`, {
-                    method: 'POST',
-                    body: formData,
-                })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.ok) {
-                            console.log('Photo sent successfully!');
-                        } else {
-                            console.error('Error sending photo:', data);
-                        }
-                    })
-                    .catch(err => console.error('Error:', err));
-            })
-            .catch(err => console.error('Error generating JPEG:', err));
-    };
+        console.log(chat_id);
+        
+    }
     
 
     return (
