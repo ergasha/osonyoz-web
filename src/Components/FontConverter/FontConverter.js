@@ -57,41 +57,36 @@ function FontConverter() {
     };
 
     const generateJpeg = () => {
-        domtoimage.toJpeg(document.getElementById('page'), {
-            quality: 1,  // Ensure highest quality
-            scale: 20
+        html2canvas(document.getElementById('page'), {
+            scale: 2,  // Upscale the resolution for better clarity
+            logging: false,  // Optional: disable logging
+            useCORS: true,  // Optional: allow for cross-origin image loading
         })
-        .then(function (dataUrl) {
-            const byteArray = atob(dataUrl.split(',')[1]);
-            const arrayBuffer = new ArrayBuffer(byteArray.length);
-            const uintArray = new Uint8Array(arrayBuffer);
-            
-            for (let i = 0; i < byteArray.length; i++) {
-                uintArray[i] = byteArray.charCodeAt(i);
-            }
-            
-            const blob = new Blob([uintArray], { type: 'image/jpeg' });
-            const formData = new FormData();
-            formData.append('chat_id', window.Telegram.WebApp.initDataUnsafe.user.id); 
-            formData.append('document', blob, 'download.jpeg');
-            
-            fetch('https://api.telegram.org/bot5228072940:AAFk5TyN-1-e7T0w60Pe_hmFk2Cn8Iqn0zI/sendDocument', {
-                method: 'POST',
-                body: formData,
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.ok) {
-                    console.log('Image sent successfully');
-                } else {
-                    console.error('Failed to send image:', data.description);
-                }
-            })
-            .catch(error => {
-                console.error('Error while sending photo:', error);
-            });
+        .then(canvas => {
+            canvas.toBlob(function(blob) {
+                const formData = new FormData();
+                formData.append('chat_id', window.Telegram.WebApp.initDataUnsafe.user.id); 
+                formData.append('document', blob, 'download.jpeg');
+                
+                fetch('https://api.telegram.org/bot5228072940:AAFk5TyN-1-e7T0w60Pe_hmFk2Cn8Iqn0zI/sendDocument', {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.ok) {
+                        console.log('Image sent successfully');
+                    } else {
+                        console.error('Failed to send image:', data.description);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error while sending photo:', error);
+                });
+            }, 'image/jpeg');
         });
     };
+    
     
     
 
