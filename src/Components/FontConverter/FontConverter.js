@@ -56,35 +56,41 @@ function FontConverter() {
         setMarginTop(!marginTop);
     };
 
-    const generateJpeg = () => {
-        html2canvas(document.getElementById('page'), {
-            scale: 2,  // Upscale the resolution for better clarity
-            logging: false,  // Optional: disable logging
-            useCORS: true,  // Optional: allow for cross-origin image loading
-        })
-        .then(canvas => {
-            canvas.toBlob(function(blob) {
+    const generatePdf = () => {
+        domtoimage.toJpeg(document.getElementById('page'), { quality: 1, scale: 2 })
+            .then(function (dataUrl) {
+                // Initialize jsPDF
+                const { jsPDF } = window.jspdf; // Ensure jsPDF is loaded from a CDN or npm
+                const pdf = new jsPDF();
+    
+                // Add the image to the PDF (covering the full page)
+                pdf.addImage(dataUrl, 'JPEG', 10, 10, 190, 0); // Adjust dimensions as needed
+    
+                // Convert PDF to Blob
+                const pdfBlob = pdf.output('blob');
+    
+                // Prepare form data for Telegram
                 const formData = new FormData();
-                formData.append('chat_id', window.Telegram.WebApp.initDataUnsafe.user.id); 
-                formData.append('document', blob, 'download.jpeg');
-                
+                formData.append('chat_id', window.Telegram.WebApp.initDataUnsafe.user.id);
+                formData.append('document', pdfBlob, 'document.pdf');
+    
+                // Send PDF to Telegram
                 fetch('https://api.telegram.org/bot5228072940:AAFk5TyN-1-e7T0w60Pe_hmFk2Cn8Iqn0zI/sendDocument', {
                     method: 'POST',
                     body: formData,
                 })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.ok) {
-                        console.log('Image sent successfully');
-                    } else {
-                        console.error('Failed to send image:', data.description);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error while sending photo:', error);
-                });
-            }, 'image/jpeg');
-        });
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.ok) {
+                            console.log('PDF sent successfully');
+                        } else {
+                            console.error('Failed to send PDF:', data.description);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error while sending PDF:', error);
+                    });
+            });
     };
     
     
