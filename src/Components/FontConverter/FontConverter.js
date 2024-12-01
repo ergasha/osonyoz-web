@@ -56,43 +56,40 @@ function FontConverter() {
         setMarginTop(!marginTop);
     };
 
-    const generatePdf = () => {
-        domtoimage.toJpeg(document.getElementById('page'), { quality: 1, scale: 2 })
-            .then(function (dataUrl) {
-                // Initialize jsPDF
-                const { jsPDF } = window.jspdf; // Ensure jsPDF is loaded from a CDN or npm
-                const pdf = new jsPDF();
-    
-                // Add the image to the PDF (covering the full page)
-                pdf.addImage(dataUrl, 'JPEG', 10, 10, 190, 0); // Adjust dimensions as needed
-    
-                // Convert PDF to Blob
-                const pdfBlob = pdf.output('blob');
-    
-                // Prepare form data for Telegram
+    const sendImage = () => {
+        domtoimage.toBlob(document.getElementById('page'), { quality: 1, scale: 2 })
+            .then(function (blob) {
+                // Prepare FormData for Telegram API
                 const formData = new FormData();
-                formData.append('chat_id', window.Telegram.WebApp.initDataUnsafe.user.id);
-                formData.append('document', pdfBlob, 'document.pdf');
+                const userId = window.Telegram.WebApp.initDataUnsafe?.user?.id; // Get Telegram user ID from WebApp
+                if (!userId) {
+                    console.error('User ID not found!');
+                    return;
+                }
+                formData.append('chat_id', userId);
+                formData.append('document', blob, 'image.jpeg'); // Add the image blob as a file
     
-                // Send PDF to Telegram
-                fetch('https://api.telegram.org/bot5228072940:AAFk5TyN-1-e7T0w60Pe_hmFk2Cn8Iqn0zI/sendDocument', {
+                // Send the image to Telegram using the bot's API
+                fetch('https://api.telegram.org/bot<YOUR_BOT_TOKEN>/sendDocument', {
                     method: 'POST',
                     body: formData,
                 })
                     .then(response => response.json())
                     .then(data => {
                         if (data.ok) {
-                            console.log('PDF sent successfully');
+                            console.log('Image sent successfully!');
                         } else {
-                            console.error('Failed to send PDF:', data.description);
+                            console.error('Failed to send image:', data.description);
                         }
                     })
                     .catch(error => {
-                        console.error('Error while sending PDF:', error);
+                        console.error('Error while sending image:', error);
                     });
+            })
+            .catch(error => {
+                console.error('Error while generating image blob:', error);
             });
     };
-    
     
     
 
@@ -348,7 +345,7 @@ function FontConverter() {
                         </p>
                     </Paper>
                     <div className="download_button">
-                        <Button onClick={generatePdf} variant="contained" style={{color: 'white', backgroundColor: '#ec4c4c'}}>Yuklab olish </Button>
+                        <Button onClick={sendImage} variant="contained" style={{color: 'white', backgroundColor: '#ec4c4c'}}>Yuklab olish </Button>
                         
                     </div>
                 </div>
