@@ -85,7 +85,7 @@ function FontConverter() {
                 handleClick()
                 formData.append('chat_id', userId);
                 formData.append('document', blob, 'image.jpeg'); 
-                fetch('https://api.telegram.org/bot5228072940:AAFk5TyN-1-e7T0w60Pe_hmFk2Cn8Iqn0zI/sendDocument', {
+                fetch('https://api.telegram.org/bot1816873661:AAEuynpfpPr0KRJ2IhrmV5gQQCUAoi3KFHE/sendDocument', {
                     method: 'POST',
                     body: formData,
                 })
