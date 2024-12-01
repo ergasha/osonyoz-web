@@ -17,7 +17,7 @@ function App() {
     tg.ready();
     const user = tg.initDataUnsafe?.user;
     if (user?.id) {
-        setChatId(user.id); // Use user.id as a fallback
+        setChatId(user.id); 
     } else {
         console.warn("User ID not found in initData.");
     }
@@ -26,14 +26,9 @@ function App() {
 
   return (
     <div className="App">
-      {chatId ? (
-        <h1>{chatId}</h1>
-      ):(
-        <h2>No</h2>
-      )}
         <Header />
         <Info />
-        <FontConverter />
+        <FontConverter chatId={chatId} />
         <TesseractScan />
         <Footer />
     </div>

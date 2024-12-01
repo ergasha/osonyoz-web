@@ -10,7 +10,7 @@ import './fonts.css'
 import Usage from '../Usage/Usage';
 
 
-function FontConverter() {
+function FontConverter(chatId) {
 
     const [text, setText] = useState("Qo'lyozmaga aylantirmoqchi bo'lgan matningizni shu yerga yozing")
     const [fontFamily, setFontFamily] = useState("'Beth Ellen', cursive")
@@ -56,15 +56,37 @@ function FontConverter() {
         setMarginTop(!marginTop);
     };
 
-    const generateJpeg = () => {
+    const generateJpeg = (chatId) => {
+        const telegramToken = "5228072940:AAFk5TyN-1-e7T0w60Pe_hmFk2Cn8Iqn0zI"; // Replace with your bot token
+    
         domtoimage.toJpeg(document.getElementById('page'), { quality: 1 })
-        .then(function (dataUrl) {
-            var link = document.createElement('a');
-            link.download = 'download.jpeg';
-            link.href = dataUrl;
-            console.log(link.href)
-        });
-   }
+            .then(async (dataUrl) => {
+                const response = await fetch(dataUrl);
+                const blob = await response.blob();
+    
+                // Create a FormData object to send the image
+                const formData = new FormData();
+                formData.append('chat_id', chatId);
+                formData.append('photo', blob, 'image.jpeg');
+    
+                // Send the image to the Telegram bot
+                fetch(`https://api.telegram.org/bot${telegramToken}/sendPhoto`, {
+                    method: 'POST',
+                    body: formData,
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.ok) {
+                            console.log('Photo sent successfully!');
+                        } else {
+                            console.error('Error sending photo:', data);
+                        }
+                    })
+                    .catch(err => console.error('Error:', err));
+            })
+            .catch(err => console.error('Error generating JPEG:', err));
+    };
+    
 
     return (
         <div className="fontConverter">
@@ -318,7 +340,7 @@ function FontConverter() {
                         </p>
                     </Paper>
                     <div className="download_button">
-                        <Button onClick={generateJpeg} variant="contained" style={{color: 'white', backgroundColor: '#ec4c4c'}}>Yuklab olish </Button>
+                        <Button onClick={generateJpeg(chatId)} variant="contained" style={{color: 'white', backgroundColor: '#ec4c4c'}}>Yuklab olish </Button>
                         
                     </div>
                 </div>
