@@ -13,20 +13,16 @@ function App() {
   const [chatId, setChatId] = useState(null);
 
   useEffect(() => {
-      const tg = window.Telegram.WebApp;
-      tg.ready();
-      const initData = tg.initDataUnsafe;
-      if (initData?.chat?.id) {
-          setChatId(initData.chat.id);
-      } else {
-          console.warn('Chat ID not found in initData.');
-      }
-      tg.expand();
+    const tg = window.Telegram.WebApp;
+    tg.ready();
+    const user = tg.initDataUnsafe?.user;
+    if (user?.id) {
+        setChatId(user.id); // Use user.id as a fallback
+    } else {
+        console.warn("User ID not found in initData.");
+    }
+}, []);
 
-      return () => {
-          tg.close(); 
-      };
-  }, []);
 
   return (
     <div className="App">
