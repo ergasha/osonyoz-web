@@ -7,6 +7,7 @@ import './FontConverter.css'
 import './fonts.css'
 import generateHighResImage from './imageGenerator';
 import Usage from '../Usage/Usage';
+import { Snackbar,Alert  } from "@mui/material";
 
 
 function FontConverter() {
@@ -55,6 +56,7 @@ function FontConverter() {
         setMarginTop(!marginTop);
     };
 
+
     const sendImage = () => {
         const scale = 2; 
         const node = document.getElementById('page'); 
@@ -76,9 +78,11 @@ function FontConverter() {
                 const formData = new FormData();
                 const userId = window.Telegram.WebApp.initDataUnsafe?.user?.id; 
                 if (!userId) {
+                    handleClick()
                     generateHighResImage()
                     return;
                 }
+                handleClick()
                 formData.append('chat_id', userId);
                 formData.append('document', blob, 'image.jpeg'); 
                 fetch('https://api.telegram.org/bot5228072940:AAFk5TyN-1-e7T0w60Pe_hmFk2Cn8Iqn0zI/sendDocument', {
@@ -101,12 +105,31 @@ function FontConverter() {
                 console.error('Error while generating image blob:', error);
             });
     };
-    
-    
+    const [open, setOpen] = useState(false);
+    const [severity, setSeverity] = useState("success"); // 'success' or 'error'
+  
+    const handleClick = () => {
+      setOpen(true);
+      setSeverity("success"); // or 'error'
+    };
+  
+    const handleClose = () => {
+      setOpen(false);
+    };
     
 
     return (
         <div className="fontConverter">
+                  <Snackbar
+        open={open}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert severity={severity} onClose={handleClose}>
+          Qo'lyozma sizga telegramdan yuborildi !
+        </Alert>
+      </Snackbar>
             <div className="fontStyler">
                 <div className="input_container">
                     <Paper elevation={15} className="paper_input" >

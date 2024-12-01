@@ -1,10 +1,10 @@
 import domtoimage from 'dom-to-image';
 const generateHighResImage = () => {
     const node = document.getElementById('page');
-    const scale = 2; // Adjust this to achieve the desired resolution (e.g., 2x scale for 2000x2000)
+    const scale = 2; 
 
     const options = {
-        quality: 1, // Ensure maximum quality for JPEG
+        quality: 1, 
         width: node.offsetWidth * scale,
         height: node.offsetHeight * scale,
         style: {
