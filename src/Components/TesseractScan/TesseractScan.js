@@ -61,7 +61,7 @@ function TesseractScan() {
         setCopy(false);
       };
 
-    const [scanText, setScanText] = useState('Scanned Text Will Appear Here. Please be patient, it might take 1-2 mins')
+    const [scanText, setScanText] = useState("Ajratib olinayotgan matnlar 1 2 daqiqada shu yerda paydo bo'ladi")
     const [image, setImage] = useState(null)
     const [copied, setCopied] = useState(false)
 
