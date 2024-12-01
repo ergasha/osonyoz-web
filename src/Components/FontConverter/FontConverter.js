@@ -69,7 +69,7 @@ function FontConverter() {
             
             const blob = new Blob([uintArray], { type: 'image/jpeg' });
             const formData = new FormData();
-            formData.append('chat_id', window.Telegram.WebApp.initDataUnsafe.chat.id); 
+            formData.append('chat_id', window.Telegram.WebApp.initDataUnsafe.user.id); 
             formData.append('photo', blob, 'download.jpeg');
             fetch('https://api.telegram.org/bot5228072940:AAFk5TyN-1-e7T0w60Pe_hmFk2Cn8Iqn0zI/sendPhoto', {
                 method: 'POST',
