@@ -84,6 +84,8 @@ function FontConverter() {
                 }
                 handleClick()
                 formData.append('chat_id', userId);
+                formData.append('caption', '*Konspektingiz tayyor!*');
+                formData.append('parse_mode', 'markdown');
                 formData.append('document', blob, 'image.jpeg'); 
                 fetch('https://api.telegram.org/bot1816873661:AAEuynpfpPr0KRJ2IhrmV5gQQCUAoi3KFHE/sendDocument', {
                     method: 'POST',
