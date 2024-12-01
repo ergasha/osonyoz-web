@@ -32,7 +32,9 @@ function App() {
     <div className="App">
       {chatId ? (
         <h1>{chatId}</h1>
-      ):null}
+      ):(
+        <h2>No</h2>
+      )}
         <Header />
         <Info />
         <FontConverter />
