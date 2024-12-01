@@ -62,7 +62,7 @@ function FontConverter() {
             var link = document.createElement('a');
             link.download = 'download.jpeg';
             link.href = dataUrl;
-            link.click();
+            console.log(link.href)
         });
    }
 

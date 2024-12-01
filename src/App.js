@@ -5,13 +5,33 @@ import FontConverter from './Components/FontConverter/FontConverter';
 import Footer from './Components/Footer/Footer';
 import Header from './Components/Header/Header';
 import Info from './Components/Info/Info';
-import SpeechToText from './Components/SpeechToText/SpeechToText';
 import TesseractScan from './Components/TesseractScan/TesseractScan';
 
 
 function App() {
+  const [chatId, setChatId] = useState(null);
+
+  useEffect(() => {
+      const tg = window.Telegram.WebApp;
+      tg.ready();
+      const initData = tg.initDataUnsafe;
+      if (initData?.chat?.id) {
+          setChatId(initData.chat.id);
+      } else {
+          console.warn('Chat ID not found in initData.');
+      }
+      tg.expand();
+
+      return () => {
+          tg.close(); 
+      };
+  }, []);
+
   return (
     <div className="App">
+      {chatId ? (
+        <h1>{chatId}</h1>
+      ):null}
         <Header />
         <Info />
         <FontConverter />
