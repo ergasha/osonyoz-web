@@ -9,18 +9,15 @@ import User from './services/userService';
 import axios from './services/axios';
 
 function App() {
-  const userId = window.Telegram.WebApp.initDataUnsafe?.user?.id; 
-  const [data,setData] = useState()
+  const [userId,setUser] = useState()
   useEffect(() => {
     const check = async () => {
-      axios.post('http://193.180.208.4:8000/add-user',{'user_id':userId}).then(res=>{
-        setData(res.data)
-      })
+      const userId = window.Telegram.WebApp.initDataUnsafe?.user?.id; 
+      axios.post('http://193.180.208.4:8000/add-user',{'user_id':userId});
+      setUser(userId)
     } 
-    if (userId){
-      check();
-    }
-  }, []);
+    check()
+  }, [userId]);
 
   return (
     <div className="App">
