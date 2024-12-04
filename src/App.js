@@ -9,7 +9,7 @@ import axios from './services/axios';
 import { useEffect } from 'react';
 
 function App() {
-  const [user,setUser] = useState()
+  const [user,setUser] = useState('123')
   useEffect(() => {
     if (window.Telegram?.WebApp) {
       const tg = window.Telegram.WebApp;
@@ -35,7 +35,7 @@ function App() {
         });
       }
     }
-  }, []);
+  }, [user]);
 
   return (
     <div className="App">
