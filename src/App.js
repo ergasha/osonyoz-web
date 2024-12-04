@@ -11,9 +11,12 @@ function App() {
   const [userId, setUserId] = useState(null);
 
   useEffect(() => {
+    console.log('Telegram Object:', window.Telegram);
+    console.log('initDataUnsafe:', window.Telegram?.WebApp?.initDataUnsafe);
+  
     const check = async () => {
-      const userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id; // Access at runtime
-      if (userId) {
+      if (window.Telegram?.WebApp?.initDataUnsafe?.user?.id) {
+        const userId = window.Telegram.WebApp.initDataUnsafe.user.id;
         try {
           await axios.post(
             'http://193.180.208.4:8000/add-user',
@@ -24,17 +27,18 @@ function App() {
               },
             }
           );
-          setUserId(userId); // Update state only if POST request succeeds
+          setUserId(userId);
         } catch (error) {
           console.error('Error sending POST request:', error);
         }
       } else {
-        console.log('Not accessed from Telegram.');
+        console.error('Not accessed from Telegram or initDataUnsafe is undefined.');
       }
     };
-
+  
     check();
-  }, []); // Empty dependency array ensures it runs only once
+  }, []);
+  
 
   return (
     <div className="App">
