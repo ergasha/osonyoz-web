@@ -5,7 +5,6 @@ import Footer from './Components/Footer/Footer';
 import Header from './Components/Header/Header';
 import Info from './Components/Info/Info';
 import TesseractScan from './Components/TesseractScan/TesseractScan';
-import User from './services/userService';
 import axios from './services/axios';
 
 function App() {
@@ -22,7 +21,7 @@ function App() {
   return (
     <div className="App">
         <Header />
-        {userId ? (<h1>{userId} and {data}</h1>):(<h1>No</h1>)}
+        {userId ? (<h1>{userId}</h1>):(<h1>No</h1>)}
         <Info />
         <FontConverter />
         <TesseractScan />
