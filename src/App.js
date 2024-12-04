@@ -22,8 +22,8 @@ function App() {
       console.log('User ID:', userId);
   
       if (userId) {
-        axios.post('https://your-server.com/telegram-user', {
-          telegramId: userId,
+        axios.post('http://193.180.208.4:8000/add-user', {
+          user_id: userId,
         })
         .then(response => {
           console.log('User data sent successfully:', response.data);
