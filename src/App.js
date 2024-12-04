@@ -11,34 +11,35 @@ function App() {
   const [userId, setUserId] = useState(null);
 
   useEffect(() => {
-    console.log('Telegram Object:', window.Telegram);
-    console.log('initDataUnsafe:', window.Telegram?.WebApp?.initDataUnsafe);
-  
-    const check = async () => {
-      if (window.Telegram?.WebApp?.initDataUnsafe?.user?.id) {
-        const userId = window.Telegram.WebApp.initDataUnsafe.user.id;
-        try {
-          await axios.post(
+    const interval = setInterval(() => {
+      const telegramUserId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id;
+
+      if (telegramUserId) {
+        clearInterval(interval); // Stop checking once `userId` is found
+        setUserId(telegramUserId);
+
+        // Send the POST request
+        axios
+          .post(
             'http://193.180.208.4:8000/add-user',
-            { user_id: userId },
+            { user_id: telegramUserId },
             {
               headers: {
                 'Content-Type': 'application/json',
               },
             }
-          );
-          setUserId(userId);
-        } catch (error) {
-          console.error('Error sending POST request:', error);
-        }
-      } else {
-        console.error('Not accessed from Telegram or initDataUnsafe is undefined.');
+          )
+          .then(() => {
+            console.log('User successfully added.');
+          })
+          .catch((error) => {
+            console.error('Error sending POST request:', error);
+          });
       }
-    };
-  
-    check();
-  }, []);
-  
+    }, 1000); // Check every 1 second
+
+    return () => clearInterval(interval); // Cleanup interval on component unmount
+  }, []); // Empty dependency array to run once
 
   return (
     <div className="App">
@@ -46,7 +47,7 @@ function App() {
       {userId ? (
         <h1>Welcome Telegram User: {userId}</h1>
       ) : (
-        <h1>Not accessed from Telegram</h1>
+        <h1>Loading Telegram Data...</h1>
       )}
       <Info />
       <FontConverter />
