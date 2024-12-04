@@ -8,9 +8,11 @@ import TesseractScan from './Components/TesseractScan/TesseractScan';
 import axios from './services/axios';
 
 function App() {
-  const userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id; 
+  const [userId, setUserId] = useState(null);
+
   useEffect(() => {
     const check = async () => {
+      const userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id; // Access at runtime
       if (userId) {
         try {
           await axios.post(
@@ -22,26 +24,30 @@ function App() {
               },
             }
           );
+          setUserId(userId); // Update state only if POST request succeeds
         } catch (error) {
           console.error('Error sending POST request:', error);
         }
       } else {
-        console.error('User ID not found.');
+        console.log('Not accessed from Telegram.');
       }
     };
-  
+
     check();
-  }, []); 
-  
+  }, []); // Empty dependency array ensures it runs only once
 
   return (
     <div className="App">
-        <Header />
-        {userId ? (<h1>{userId}</h1>):(<h1>No</h1>)}
-        <Info />
-        <FontConverter />
-        <TesseractScan />
-        <Footer />
+      <Header />
+      {userId ? (
+        <h1>Welcome Telegram User: {userId}</h1>
+      ) : (
+        <h1>Not accessed from Telegram</h1>
+      )}
+      <Info />
+      <FontConverter />
+      <TesseractScan />
+      <Footer />
     </div>
   );
 }
