@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import FontConverter from './Components/FontConverter/FontConverter';
 import Footer from './Components/Footer/Footer';
@@ -8,10 +8,12 @@ import TesseractScan from './Components/TesseractScan/TesseractScan';
 import User from './services/userService';
 
 function App() {
+  const userId = window.Telegram.WebApp.initDataUnsafe?.user?.id; 
+  const [data,setData] = useState()
   useEffect(() => {
-    const userId = window.Telegram.WebApp.initDataUnsafe?.user?.id; 
     const check = async () => {
-      await User.check_user(userId)
+      const res = await User.check_user(userId)
+      setData(res.data)
     } 
     if (userId){
       check();
@@ -21,6 +23,7 @@ function App() {
   return (
     <div className="App">
         <Header />
+        {userId ? (<h1>{userId} and {data}</h1>):(<h1>No</h1>)}
         <Info />
         <FontConverter />
         <TesseractScan />
