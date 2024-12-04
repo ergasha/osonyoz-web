@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import FontConverter from './Components/FontConverter/FontConverter';
 import Footer from './Components/Footer/Footer';
@@ -9,6 +9,7 @@ import axios from './services/axios';
 import { useEffect } from 'react';
 
 function App() {
+  const [user,setUser] = useState()
   useEffect(() => {
     if (window.Telegram?.WebApp) {
       const tg = window.Telegram.WebApp;
@@ -19,6 +20,7 @@ function App() {
       console.log('initData:', tg.initData);
   
       const userId = tg.initDataUnsafe?.user?.id; // Safely access user data
+      setUser(userId)
       console.log('User ID:', userId);
   
       if (userId) {
@@ -38,6 +40,9 @@ function App() {
   return (
     <div className="App">
         <Header />
+        {user ? (<h1>{user}</h1>):(
+          <h1>No</h1>
+        )}
         <Info />
         <FontConverter />
         <TesseractScan />
