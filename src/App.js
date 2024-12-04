@@ -39,7 +39,7 @@ function App() {
     }, 1000); // Check every 1 second
 
     return () => clearInterval(interval); // Cleanup interval on component unmount
-  }, []); // Empty dependency array to run once
+  }, [userId]); // Empty dependency array to run once
 
   return (
     <div className="App">
