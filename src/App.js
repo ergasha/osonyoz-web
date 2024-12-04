@@ -12,8 +12,18 @@ function App() {
   useEffect(() => {
     const check = async () => {
       const userId = window.Telegram.WebApp.initDataUnsafe?.user?.id; 
-      axios.post('http://193.180.208.4:8000/add-user',{'user_id':userId});
+      axios.post(
+        'http://193.180.208.4:8000/add-user',
+        { user_id: userId },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      
       setUser(userId)
+      
     } 
     check()
   }, [userId]);
