@@ -5,7 +5,6 @@ import Footer from './Components/Footer/Footer';
 import Header from './Components/Header/Header';
 import Info from './Components/Info/Info';
 import TesseractScan from './Components/TesseractScan/TesseractScan';
-import { useEffect } from 'react';
 import User from './services/userService';
 
 function App() {
