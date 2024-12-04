@@ -8,10 +8,9 @@ import TesseractScan from './Components/TesseractScan/TesseractScan';
 import axios from './services/axios';
 
 function App() {
-  const [userId,setUser] = useState()
+  const userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id; 
   useEffect(() => {
     const check = async () => {
-      const userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id; 
       if (userId) {
         try {
           await axios.post(
@@ -23,7 +22,6 @@ function App() {
               },
             }
           );
-          setUser(userId);
         } catch (error) {
           console.error('Error sending POST request:', error);
         }
