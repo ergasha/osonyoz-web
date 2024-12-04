@@ -10,17 +10,20 @@ import { useEffect } from 'react';
 
 function App() {
   useEffect(() => {
-    // Check if the app is accessed from Telegram
     if (window.Telegram?.WebApp) {
       const tg = window.Telegram.WebApp;
-
-      // Get the user info from Telegram Web App context
-      const userId = tg.initDataUnsafe?.user?.id;
-
+      tg.ready(); // Call this to notify Telegram that the Web App is fully loaded
+      tg.expand(); // Optional: Expands the app to full screen
+  
+      // Log initData to verify it exists
+      console.log('initData:', tg.initData);
+  
+      const userId = tg.initDataUnsafe?.user?.id; // Safely access user data
+      console.log('User ID:', userId);
+  
       if (userId) {
-        // Send a POST request to your server with the user's Telegram ID
-        axios.post('http://193.180.208.4:8000/add-user', {
-          user_id: userId,
+        axios.post('https://your-server.com/telegram-user', {
+          telegramId: userId,
         })
         .then(response => {
           console.log('User data sent successfully:', response.data);
