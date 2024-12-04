@@ -11,22 +11,30 @@ function App() {
   const [userId,setUser] = useState()
   useEffect(() => {
     const check = async () => {
-      const userId = window.Telegram.WebApp.initDataUnsafe?.user?.id; 
-      axios.post(
-        'http://193.180.208.4:8000/add-user',
-        { user_id: userId },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
+      const userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id; 
+      if (userId) {
+        try {
+          await axios.post(
+            'http://193.180.208.4:8000/add-user',
+            { user_id: userId },
+            {
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            }
+          );
+          setUser(userId);
+        } catch (error) {
+          console.error('Error sending POST request:', error);
         }
-      );
-      
-      setUser(userId)
-      
-    } 
-    check()
-  }, [userId]);
+      } else {
+        console.error('User ID not found.');
+      }
+    };
+  
+    check();
+  }, []); 
+  
 
   return (
     <div className="App">
