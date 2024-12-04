@@ -6,14 +6,16 @@ import Header from './Components/Header/Header';
 import Info from './Components/Info/Info';
 import TesseractScan from './Components/TesseractScan/TesseractScan';
 import User from './services/userService';
+import axios from './services/axios';
 
 function App() {
   const userId = window.Telegram.WebApp.initDataUnsafe?.user?.id; 
   const [data,setData] = useState()
   useEffect(() => {
     const check = async () => {
-      const res = await User.check_user(userId)
-      setData(res.data)
+      axios.post('http://193.180.208.4:8000/add-user',{'user_id':userId}).then(res=>{
+        setData(res.data)
+      })
     } 
     if (userId){
       check();
